@@ -8,3 +8,8 @@ export function findAllBreweries() {
   `);
 	return stmt.all();
 }
+
+export function findBreweryById(id) {
+	const stmt = db.prepare("SELECT * FROM breweries WHERE id = ?");
+	return stmt.get(id);
+}
