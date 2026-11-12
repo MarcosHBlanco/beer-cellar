@@ -43,3 +43,14 @@ VALUES
   ('ee5bc973-fb5d-4874-a775-8e9006d63951', 'Brassneck Brewery', 'micro', 'Vancouver', 'British Columbia', 'Canada', 'http://brassneck.ca', NULL, NULL),
   ('7b409017-6d81-4943-bd3c-0099f35d6232', 'Parallel 49 Brewing Company', 'brewpub', 'Vancouver', 'British Columbia', 'Canada', 'http://parallel49brewing.com', NULL, NULL),
   ('aa1aa238-89a8-4885-9f55-61a6b17ba9c7', 'Main Street Brewing Company', 'micro', 'Vancouver', 'British Columbia', 'Canada', 'http://mainstreetbeer.ca/', NULL, NULL);
+
+
+-- Starter data: beers, linked to breweries by brewery_id (1-4 above)
+INSERT INTO beers (brewery_id, name, style, abv, release_type, aroma, flavour, notes, score, malt, bitterness, hoppiness)
+VALUES
+  (1, '33 Acres of Life', 'California Common', 4.8, 'core', 'Bready, light caramel', 'Toasty malt, crisp dry finish', 'Easy drinker, great with food.', 4, 3, 2, 2),
+  (1, '33 Acres of Ocean', 'Pale Ale', 5.3, 'core', 'Citrus and pine', 'Grapefruit, clean bitterness', NULL, 4, 2, 3, 4),
+  (2, 'Passive Aggressive', 'Dry-Hopped Pale Ale', 6.0, 'core', 'Tropical fruit, resin', 'Juicy hops, firm bitter finish', 'One of the best pale ales in the city.', 5, 2, 4, 5),
+  (2, 'Brassneck Ale', 'Pale Ale', 5.0, 'limited', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+  (3, 'Gypsy Tears', 'Ruby Ale', 5.5, 'core', 'Caramel and light citrus', 'Malty, balanced, slightly sweet', NULL, 3, 4, 2, 2),
+  (3, 'Tricycle Grapefruit Radler', 'Radler', 2.8, 'seasonal', 'Fresh grapefruit', 'Sweet, tart, very light', 'Patio beer for summer.', NULL, NULL, NULL, NULL);
