@@ -1,6 +1,6 @@
 import db from "../database/db.js";
 
-export function findAllBeers() {
+export function findAllBeers(limit, offset) {
 	const stmt = db.prepare(`
     SELECT
       beers.id,
@@ -14,6 +14,7 @@ export function findAllBeers() {
     FROM beers
     JOIN breweries ON beers.brewery_id = breweries.id
     ORDER BY beers.name
+    LIMIT ? OFFSET ?
   `);
-	return stmt.all();
+	return stmt.all(limit, offset);
 }
