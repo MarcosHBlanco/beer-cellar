@@ -27,3 +27,13 @@ export function findAllBeers(limit, offset, releaseType) {
 
 	return db.prepare(sql).all(...values);
 }
+
+export function findBeerById(id) {
+	const stmt = db.prepare(`
+    SELECT beers.*, breweries.name AS brewery_name
+    FROM beers
+    JOIN breweries ON beers.brewery_id = breweries.id
+    WHERE beers.id = ?  
+  `);
+	return stmt.get(id);
+}
