@@ -42,3 +42,21 @@ export function validateBeerQuery(req, res, next) {
 
 	next();
 }
+
+export function validateSearchQuery(req, res, next) {
+	const query = req.query.query;
+
+	if (typeof query !== "string" || query.trim().length < 2) {
+		return res.status(400).json({
+			status: 400,
+			errors: [
+				{
+					field: "query",
+					message: "query must be at least 2 characters",
+				},
+			],
+		});
+	}
+
+	next();
+}
