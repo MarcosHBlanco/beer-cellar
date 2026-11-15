@@ -1,4 +1,8 @@
-import { findAllBeers, findBeerById } from "../models/beersModel.js";
+import {
+	findAllBeers,
+	findBeerById,
+	insertBeer,
+} from "../models/beersModel.js";
 
 const PAGE_SIZE = 5;
 
@@ -34,6 +38,60 @@ export function getBeerById(req, res) {
 		links: {
 			self: `/api/v1/beers/${beer.id}`,
 			brewery: `/api/v1/breweries/${beer.brewery_id}`,
+			all: "/api/v1/beers",
+		},
+	});
+}
+
+export function createBeer(req, res) {
+	//1. Ta=ke only the fields we know about
+	const beer = {
+		brewery_id: req.body.brewery_id,
+		name: req.body.name.trim(),
+		style: req.body.style,
+		abv: req.body.abv,
+		release_type: req.body.release_type,
+		aroma: req.body.aroma,
+		flavour: req.body.flavour,
+		notes: req.body.notes,
+		score: req.body.score,
+		malt: req.body.malt,
+		bitterness: req.body.bitterness,
+		hoppiness: req.body.hoppiness,
+	};
+
+	//2. Save it
+	let id;
+	try {
+		id = insertBeer(beer);
+	} catch (error) {
+		if (error.code === "SQLITE_CONSTRAINT_FOREIGNKEY") {
+			return res.status(422).json({
+				status: 422,
+				errors: [
+					{ field: "brewery_id", message: "No brewery with that ID exists" },
+				],
+			});
+		}
+		if (error.code === "SQLITE_CONSTRAINT_CHECK") {
+			return res.status(422).json({
+				status: 422,
+				message: "One of the values is outside its allowed range",
+			});
+		}
+		throw error;
+	}
+
+	//3. Answer with 201 Created
+	const location = `/api/v1/beers/${id}`;
+	res.set("Location", location);
+	res.status(201).json({
+		status: 201,
+		message: "Beer saved",
+		beer: { id, ...beer },
+		links: {
+			self: location,
+			brewery: `/api/v1/breweries/$(beer.brewery_id)`,
 			all: "/api/v1/beers",
 		},
 	});

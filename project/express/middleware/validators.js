@@ -74,3 +74,32 @@ export function validateBreweryBody(req, res, next) {
 
 	next();
 }
+
+export function validateBeerBody(req, res, next) {
+	const body = req.body || {};
+	const errors = [];
+
+	//brewery_id: required, a whole number from 1 up
+	if (!Number.isInteger(body.brewery_id) || body.brewery_id < 1) {
+		errors.push({
+			field: "brewery_id",
+			message: "brewery_id must be a positive whole number",
+		});
+	}
+
+	//name: required text, 1 to 100 characters
+	if (typeof body.name !== "string" || body.name.trim() === "") {
+		errors.push({ field: "name", message: "name is required" });
+	} else if (body.name.trim().length > 100) {
+		errors.push({
+			field: "name",
+			message: "name mjst be 100 character or less",
+		});
+	}
+
+	if (errors.length > 0) {
+		return res.status(400).json({ status: 400, errors });
+	}
+
+	next();
+}
