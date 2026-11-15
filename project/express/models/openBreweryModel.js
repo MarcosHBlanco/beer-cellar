@@ -10,3 +10,17 @@ export async function searchOpenBreweries(query) {
 
 	return response.json();
 }
+
+export async function fetchOpenBreweryId(obdbId) {
+	const response = await fetch(`${BASE_URL}/${encodeURIComponent(obdbId)}`);
+
+	if (response.status === 404) {
+		return null;
+	}
+
+	if (!response.ok) {
+		throw new Error(`Open Brewery DB responded with ${response.status}`);
+	}
+
+	return response.json();
+}

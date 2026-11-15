@@ -60,3 +60,17 @@ export function validateSearchQuery(req, res, next) {
 
 	next();
 }
+
+export function validateBreweryBody(req, res, next) {
+	const body = req.body || {};
+	const obdbId = body.obdb_id;
+
+	if (typeof obdbId !== "string" || obdbId.trim() === "") {
+		return res.status(400).json({
+			status: 400,
+			errors: [{ field: "obdb_id", message: "obdb_id is required" }],
+		});
+	}
+
+	next();
+}
