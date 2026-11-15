@@ -93,8 +93,67 @@ export function validateBeerBody(req, res, next) {
 	} else if (body.name.trim().length > 100) {
 		errors.push({
 			field: "name",
-			message: "name mjst be 100 character or less",
+			message: "name must be 100 character or less",
 		});
+	}
+
+	// style: optional text, up to 50 characters
+	if (!isMissing(body.style)) {
+		if (typeof body.style !== "string" || body.style.length > 50) {
+			errors.push({
+				field: "style",
+				message: "style must be text of 50 characters or fewer",
+			});
+		}
+	}
+
+	// abv: optional number from 0 to 100
+	if (!isMissing(body.abv)) {
+		if (typeof body.abv !== "number" || body.abv < 0 || body.abv > 100) {
+			errors.push({
+				field: "abv",
+				message: "abv must be a number from 0 to 100",
+			});
+		}
+	}
+
+	// release_type: optional, one of the allowed values
+	if (!isMissing(body.release_type)) {
+		if (!RELEASE_TYPES.includes(body.release_type)) {
+			errors.push({
+				field: "release_type",
+				message:
+					"release_type must be one of: core, seasonal, limited, one-off",
+			});
+		}
+	}
+
+	// aroma, flavour, notes: optional text, up to 500 characters
+	const TEXT_FIELDS = ["aroma", "flavour", "notes"];
+	for (const field of TEXT_FIELDS) {
+		const value = body[field];
+		if (!isMissing(value)) {
+			if (typeof value !== "string" || value.length > 500) {
+				errors.push({
+					field,
+					message: `${field} must be text of 500 characters or fewer`,
+				});
+			}
+		}
+	}
+
+	// score and the three sliders: optional whole numbers from 1 to 5
+	const SCALE_FIELDS = ["score", "malt", "bitterness", "hoppiness"];
+	for (const field of SCALE_FIELDS) {
+		const value = body[field];
+		if (!isMissing(value)) {
+			if (!Number.isInteger(value) || value < 1 || value > 5) {
+				errors.push({
+					field,
+					message: `${field} must be a whole number from 1 to 5`,
+				});
+			}
+		}
 	}
 
 	if (errors.length > 0) {
@@ -102,4 +161,8 @@ export function validateBeerBody(req, res, next) {
 	}
 
 	next();
+}
+
+function isMissing(value) {
+	return value === undefined || value === null;
 }
