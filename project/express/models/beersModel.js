@@ -114,3 +114,9 @@ export function updateBeer(id, beer) {
 
 	return result.changes;
 }
+
+export function deleteBeer(id) {
+	const stmt = db.prepare("DELETE FROM beers WHERE id = ?");
+	const result = stmt.run(id);
+	return result.changes;
+}

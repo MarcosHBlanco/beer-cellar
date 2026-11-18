@@ -1,6 +1,7 @@
 import express from "express";
 import {
 	createBeer,
+	deleteBeerById,
 	getAllBeers,
 	getBeerById,
 	updateBeerById,
@@ -19,4 +20,6 @@ router.get("/:id", validateId, getBeerById);
 router.post("/", validateBeerBody, createBeer);
 
 router.put("/:id", validateId, validateBeerBody, updateBeerById);
+
+router.delete("/:id", validateId, deleteBeerById);
 export default router;

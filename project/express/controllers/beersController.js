@@ -1,4 +1,5 @@
 import {
+	deleteBeer,
 	findAllBeers,
 	findBeerById,
 	insertBeer,
@@ -118,8 +119,8 @@ export function updateBeerById(req, res) {
 					{ field: "brewery_id", message: "no brewery with that ID exists" },
 				],
 			});
-			throw error;
 		}
+		throw error;
 	}
 
 	//2. Nothing changed means no beer has that ID
@@ -140,4 +141,17 @@ export function updateBeerById(req, res) {
 			all: "/api/v1/beers",
 		},
 	});
+}
+
+export function deleteBeerById(req, res) {
+	const changes = deleteBeer(req.params.id);
+
+	if (changes === 0) {
+		return res.status(404).json({
+			status: 404,
+			message: "A beer with that ID was not found",
+		});
+	}
+
+	res.status(204).end();
 }
