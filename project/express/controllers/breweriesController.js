@@ -1,3 +1,4 @@
+import { findBeersByBreweryId } from "../models/beersModel.js";
 import {
 	findAllBreweries,
 	findBreweryById,
@@ -13,6 +14,7 @@ export function getAllBreweries(req, res) {
 		...brewery,
 		links: {
 			self: `/api/v1/breweries/${brewery.id}`,
+			beers: `/api/v1/breweries/${brewery.id}/beers`,
 		},
 	}));
 
@@ -33,6 +35,7 @@ export function getBreweryById(req, res) {
 		...brewery,
 		links: {
 			self: `/api/v1/breweries/${brewery.id}`,
+			beers: `/api/v1/breweries/${brewery.id}/beers`,
 			all: "/api/v1/breweries",
 		},
 	});
@@ -118,4 +121,25 @@ export async function createBrewery(req, res) {
 			all: "/api/v1/breweries",
 		},
 	});
+}
+
+export function getBeersForBrewery(req, res) {
+	//1. Does the brewery exist?
+	const brewery = findBreweryById(req.params.id);
+	if (!brewery) {
+		return res.status(404).json({
+			status: 404,
+			message: "A brewery with that ID was not found",
+		});
+	}
+
+	//2. Get its beers (may be empty list)
+	const beers = findBeersByBreweryId(brewery.id).map((beer) => ({
+		...beer,
+		links: {
+			self: `/api/v1/beers/${beer.id}`,
+		},
+	}));
+
+	res.status(200).json(beers);
 }

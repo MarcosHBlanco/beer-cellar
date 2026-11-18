@@ -65,3 +65,13 @@ export function insertBeer(beer) {
 
 	return result.lastInsertRowid;
 }
+
+export function findBeersByBreweryId(breweryId) {
+	const stmt = db.prepare(
+		`SELECT id, name, style, abv, release_type, score
+		FROM beers
+		WHERE brewery_id = ?
+		ORDER BY name`,
+	);
+	return stmt.all(breweryId);
+}
