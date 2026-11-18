@@ -75,3 +75,42 @@ export function findBeersByBreweryId(breweryId) {
 	);
 	return stmt.all(breweryId);
 }
+
+export function updateBeer(id, beer) {
+	const stmt = db.prepare(`
+		UPDATE beers
+		SET
+			brewery_id = ?,
+			name = ?,
+			style = ?,
+			abv = ?,
+			release_type = ?,
+			aroma = ?,
+			flavour = ?,
+			notes = ?,
+			score = ?,
+			malt = ?,
+			bitterness = ?,
+			hoppiness = ?,
+			updated_at = datetime('now')
+		WHERE id = ?
+	`);
+
+	const result = stmt.run(
+		beer.brewery_id,
+		beer.name,
+		beer.style ?? null,
+		beer.abv ?? null,
+		beer.release_type ?? null,
+		beer.aroma ?? null,
+		beer.flavour ?? null,
+		beer.notes ?? null,
+		beer.score ?? null,
+		beer.malt ?? null,
+		beer.bitterness ?? null,
+		beer.hoppiness ?? null,
+		id,
+	);
+
+	return result.changes;
+}
