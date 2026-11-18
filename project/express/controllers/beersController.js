@@ -120,24 +120,24 @@ export function updateBeerById(req, res) {
 			});
 			throw error;
 		}
+	}
 
-		//2. Nothing changed means no beer has that ID
-		if (changes === 0) {
-			return res.status(404).json({
-				status: 404,
-				message: "A beer with that ID was not found",
-			});
-		}
-
-		//3. Send back the beer as it is now in the database
-		const updated = findBeerById(req.params.id);
-		res.status(200).json({
-			...updated,
-			links: {
-				self: `/api/v1/beers/${updated.id}`,
-				brewery: `/api/v1/breweries/${updated.brewery_id}`,
-				all: "/api/v1/beers",
-			},
+	//2. Nothing changed means no beer has that ID
+	if (changes === 0) {
+		return res.status(404).json({
+			status: 404,
+			message: "A beer with that ID was not found",
 		});
 	}
+
+	//3. Send back the beer as it is now in the database
+	const updated = findBeerById(req.params.id);
+	res.status(200).json({
+		...updated,
+		links: {
+			self: `/api/v1/beers/${updated.id}`,
+			brewery: `/api/v1/breweries/${updated.brewery_id}`,
+			all: "/api/v1/beers",
+		},
+	});
 }
