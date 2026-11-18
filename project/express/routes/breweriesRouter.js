@@ -5,9 +5,11 @@ import {
 	getBeersForBrewery,
 	getBreweryById,
 	searchBreweries,
+	updateBreweryById,
 } from "../controllers/breweriesController.js";
 import {
 	validateBreweryBody,
+	validateBreweryReviewBody,
 	validateId,
 	validateSearchQuery,
 } from "../middleware/validators.js";
@@ -21,4 +23,5 @@ router.get("/:id/beers", validateId, getBeersForBrewery);
 
 router.post("/", validateBreweryBody, createBrewery);
 
+router.put("/:id", validateId, validateBreweryReviewBody, updateBreweryById);
 export default router;

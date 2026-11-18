@@ -3,6 +3,7 @@ import {
 	findAllBreweries,
 	findBreweryById,
 	insertBrewery,
+	updateBreweryReview,
 } from "../models/breweriesModel.js";
 import {
 	fetchOpenBreweryId,
@@ -142,4 +143,29 @@ export function getBeersForBrewery(req, res) {
 	}));
 
 	res.status(200).json(beers);
+}
+
+export function updateBreweryById(req, res) {
+	const changes = updateBreweryReview(
+		req.params.id,
+		req.body.rating,
+		req.body.notes,
+	);
+
+	if (changes === 0) {
+		return res.status(404).json({
+			status: 404,
+			message: "A brewery with that ID was not found",
+		});
+	}
+
+	const updated = findBreweryById(req.params.id);
+	res.status(200).json({
+		...updated,
+		links: {
+			self: `/api/v1/breweries/${updated.id}`,
+			beers: `/api/v1/breweries/${updated.id}/beers`,
+			all: "/api/v1/breweries",
+		},
+	});
 }

@@ -166,3 +166,31 @@ export function validateBeerBody(req, res, next) {
 function isMissing(value) {
 	return value === undefined || value === null;
 }
+
+export function validateBreweryReviewBody(req, res, next) {
+	const body = req.body || {};
+	const errors = [];
+
+	if (!isMissing(body.rating)) {
+		if (!Number.isInteger(body.rating) || body.rating < 1 || body.rating > 5) {
+			errors.push({
+				field: "rating",
+				message: "rating must be a whole number from 1 and 5",
+			});
+		}
+	}
+	if (!isMissing(body.notes)) {
+		if (typeof body.notes !== "string" || body.notes.length > 500) {
+			errors.push({
+				field: "notes",
+				message: "notes must be text of 500 characters or fewer",
+			});
+		}
+	}
+
+	if (errors.length > 0) {
+		return res.status(400).json({ status: 400, errors });
+	}
+
+	next();
+}

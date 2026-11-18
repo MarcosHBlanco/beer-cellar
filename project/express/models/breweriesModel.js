@@ -32,3 +32,13 @@ export function insertBrewery(brewery) {
 
 	return result.lastInsertRowid;
 }
+
+export function updateBreweryReview(id, rating, notes) {
+	const stmt = db.prepare(`
+		UPDATE breweries
+		SET rating = ?, notes = ?, updated_at = datetime('now')
+		WHERE id = ?	
+	`);
+	const result = stmt.run(rating ?? null, notes ?? null, id);
+	return result.changes;
+}
