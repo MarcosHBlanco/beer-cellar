@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function BreweryList() {
+function BreweryList({ onSelect }) {
 	const [breweries, setBreweries] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
@@ -43,8 +43,10 @@ function BreweryList() {
 			<ul>
 				{breweries.map((brewery) => (
 					<li key={brewery.id}>
-						<strong>{brewery.name}</strong> . {brewery.city}
-						{brewery.rating && <span> . {brewery.rating}/5</span>}
+						<button onClick={() => onSelect(brewery.id)}>
+							<strong>{brewery.name}</strong> . {brewery.city}
+							{brewery.rating && <span> . {brewery.rating}/5</span>}
+						</button>
 					</li>
 				))}
 			</ul>
