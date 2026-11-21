@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import AddBeerForm from "./AddBeerForm";
 
 function BreweryDetail({ breweryId, onBack }) {
 	const [brewery, setBrewery] = useState(null);
 	const [beers, setBeers] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [refreshKey, setRefreshKey] = useState(0);
 
 	useEffect(() => {
 		async function loadBrewery() {
@@ -31,7 +33,7 @@ function BreweryDetail({ breweryId, onBack }) {
 		}
 
 		loadBrewery();
-	}, [breweryId]);
+	}, [breweryId, refreshKey]);
 
 	if (loading) {
 		return <p>Loading brewery...</p>;
@@ -83,6 +85,10 @@ function BreweryDetail({ breweryId, onBack }) {
 					))}
 				</ul>
 			)}
+			<AddBeerForm
+				breweryId={breweryId}
+				onBeerAdded={() => setRefreshKey(refreshKey + 1)}
+			/>
 		</section>
 	);
 }
