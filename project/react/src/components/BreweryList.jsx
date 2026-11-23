@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function BreweryList({ onSelect }) {
+function BreweryList({ onSelect, refreshKey }) {
 	const [breweries, setBreweries] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
@@ -23,7 +23,7 @@ function BreweryList({ onSelect }) {
 		}
 
 		loadBreweries();
-	}, []);
+	}, [refreshKey]);
 
 	if (loading) {
 		return <p>Loading breweries...</p>;
