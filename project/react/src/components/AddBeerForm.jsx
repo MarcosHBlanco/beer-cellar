@@ -5,7 +5,28 @@ const EMPTY_FORM = {
 	style: "",
 	abv: "",
 	release_type: "",
+	aroma: "",
+	flavour: "",
+	notes: "",
+	tasted: false,
+	score: "3",
+	malt: "3",
+	bitterness: "3",
+	hoppiness: "3",
 };
+
+const SLIDERS = [
+	{ field: "score", label: "Overall score" },
+	{ field: "malt", label: "Malt" },
+	{ field: "bitterness", label: "Bitterness" },
+	{ field: "hoppiness", label: "Hoppiness" },
+];
+
+//Empty text becomes null("not given"); otherwise the trimmed text
+function textOrNull(text) {
+	const trimmed = text.trim();
+	return trimmed === "" ? null : trimmed;
+}
 
 function AddBeerForm({ breweryId, onBeerAdded }) {
 	const [form, setForm] = useState(EMPTY_FORM);
@@ -15,7 +36,10 @@ function AddBeerForm({ breweryId, onBeerAdded }) {
 
 	function handleChange(event) {
 		const field = event.target.name;
-		const value = event.target.value;
+		const value =
+			event.target.type === "checkbox"
+				? event.target.checked
+				: event.target.value;
 		setForm({ ...form, [field]: value });
 	}
 
@@ -31,6 +55,13 @@ function AddBeerForm({ breweryId, onBeerAdded }) {
 			style: form.style.trim() === "" ? null : form.style.trim(),
 			abv: form.abv === "" ? null : Number(form.abv),
 			release_type: form.release_type === "" ? null : form.release_type,
+			aroma: textOrNull(form.aroma),
+			flavour: textOrNull(form.flavour),
+			notes: textOrNull(form.notes),
+			score: form.tasted ? Number(form.score) : null,
+			malt: form.tasted ? Number(form.malt) : null,
+			bitterness: form.tasted ? Number(form.bitterness) : null,
+			hoppiness: form.tasted ? Number(form.hoppiness) : null,
 		};
 
 		try {
@@ -99,6 +130,62 @@ function AddBeerForm({ breweryId, onBeerAdded }) {
 					<option value="one-off">One-off</option>
 				</select>
 			</label>
+
+			<label>
+				Aroma
+				<input
+					name="aroma"
+					value={form.aroma}
+					onChange={handleChange}
+					maxLength={500}
+				/>
+			</label>
+
+			<label>
+				Flavour
+				<input
+					name="flavour"
+					value={form.flavour}
+					onChange={handleChange}
+					maxLength={500}
+				/>
+			</label>
+
+			<label>
+				Notes
+				<textarea
+					name="notes"
+					value={form.notes}
+					onChange={handleChange}
+					maxLength={500}
+				/>
+			</label>
+
+			<label>
+				<input
+					type="checkbox"
+					name="tasted"
+					checked={form.tasted}
+					onChange={handleChange}
+				/>
+				I've tasted this beer
+			</label>
+
+			{form.tasted &&
+				SLIDERS.map((slider) => (
+					<label key={slider.field}>
+						{slider.label}: {form[slider.field]}
+						<input
+							type="range"
+							name={slider.field}
+							min="1"
+							max="5"
+							step="1"
+							value={form[slider.field]}
+							onChange={handleChange}
+						/>
+					</label>
+				))}
 
 			<button type="submit" disabled={submitting}>
 				{submitting ? "Saving…" : "Add beer"}
