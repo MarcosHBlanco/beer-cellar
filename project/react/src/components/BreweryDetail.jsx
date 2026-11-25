@@ -42,7 +42,7 @@ function BreweryDetail({ breweryId, onBack }) {
 	if (error) {
 		return (
 			<section>
-				<button type="button" onClick={onBack}>
+				<button type="button" className="link-button" onClick={onBack}>
 					← Back to breweries
 				</button>
 				<p className="error">{error}</p>
@@ -52,7 +52,7 @@ function BreweryDetail({ breweryId, onBack }) {
 
 	return (
 		<section>
-			<button type="button" onClick={onBack}>
+			<button type="button" className="link-button" onClick={onBack}>
 				← Back to breweries
 			</button>
 

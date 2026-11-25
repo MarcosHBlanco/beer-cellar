@@ -43,7 +43,11 @@ function BreweryList({ onSelect, refreshKey }) {
 			<ul>
 				{breweries.map((brewery) => (
 					<li key={brewery.id}>
-						<button onClick={() => onSelect(brewery.id)}>
+						<button
+							type="button"
+							className="list-button"
+							onClick={() => onSelect(brewery.id)}
+						>
 							<strong>{brewery.name}</strong> . {brewery.city}
 							{brewery.rating && <span> . {brewery.rating}/5</span>}
 						</button>

@@ -91,7 +91,7 @@ function BrewerySearch({ onBrewerySaved }) {
 			{results.length > 0 && (
 				<ul>
 					{results.map((brewery) => (
-						<li key={brewery.obdb_id}>
+						<li key={brewery.obdb_id} className="result-item">
 							<strong>{brewery.name}</strong> · {brewery.city},{" "}
 							{brewery.country}
 							<button
